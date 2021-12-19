@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface AccademyMapper {
+    //测试修改123123
     public Accademy getAccademyById(int academyId);
     public Accademy getAccademyAndMajors(Integer academyId);
     public List<Major> getMajorListByIds(Accademy accademy);
