@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    namespace:名称空间, 对应接口的全类名
+ -->
+<mapper namespace="com.company.mapper.AccademyMapper">
+<!--    type="org.mybatis.caches.ehcache.EhcacheCache"-->
+<!--    <cache type="org.mybatis.caches.ehcache.EhcacheCache"> </cache>-->
+
+
+<!--collection-->
+    <resultMap id="getAccademyAndMajors" type="Accademy">
+        <id column="accademyId" property="accademyId"></id>
+        <result column="location" property="location"></result>
+        <collection property="majors" select="com.company.mapper.MajorMapper.getMajorByAccademyId" column="accademyId">
+        </collection>
+    </resultMap>
+    <select id="getAccademyAndMajors" resultMap="getAccademyAndMajors" useCache="true">
+        select * from accademy where accademyId=#{academyId}
+    </select>
+
+
+    <select id="getAccademyById" resultType="com.company.entity.Accademy" useCache="true">
+        select * from accademy where accademyId=#{accademy}
+    </select>
+<!--    accademyId  accademyName     profile                location  -->
+    <!--     private int accademyId;
+        private String accademyName;
+        private String profile;
+        private String location;
+        private List<Major> majors;-->
+
+
+    <select id="getMajorListByIds_2" resultType="com.company.entity.Major">
+        select * from major
+        <foreach collection="majorIds" item="major_id" open="where majorId in(" close=")" separator=",">
+            #{major_id}
+        </foreach>
+    </select>
+    <select id="getAccademyBycriteria" resultType="com.company.entity.Accademy">
+        select * from accademy
+        <trim prefix="where" suffixOverrides="and" >
+            <if test="id!=null">
+                accademyId=#{id} and
+            </if>
+            <if test="name!=null">
+                accademyName=#{name} and
+            </if>
+        </trim>
+    </select>
+
+</mapper>

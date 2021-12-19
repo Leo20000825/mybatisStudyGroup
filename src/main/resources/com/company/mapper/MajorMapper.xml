@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--
+    namespace:名称空间, 对应接口的全类名
+ -->
+<mapper namespace="com.company.mapper.MajorMapper">
+
+
+<!--   simpleInsert -->
+    <insert id="simpleInsert" useGeneratedKeys="true" keyProperty="majorId">
+         insert into major (majorName,accademy) values (#{majorName},#{accademy});
+    </insert>
+<!--   simpleDeleteById -->
+    <delete id="simpleDeleteById" >
+        delete from major where majorId=#{majorId};
+    </delete>
+<!--   simpleUpdate -->
+    <update id="simpleUpdate" >
+        update major set majorName=#{majorName},accademy=#{accademy} where majorId=#{majorId}
+    </update>
+<!--    simpleSelect-->
+    <select id="simpleSelect" resultType="Major">
+        select * from major;
+    </select>
+
+<!--     resultMap
+         select: 配置查询
+         id: 唯一标识, 对应接口中的方法名
+         resultType: 返回值类型, 类的全类名, 如果返回值是集合写集合中泛型的类型
+  -->
+    <resultMap id="rm1" type="com.company.entity.Major">
+        <id property="majorId" column="majorId" ></id>
+        <result property="majorName" column="majorName"></result>
+        <result property="accademy" column="accademy"></result>
+    </resultMap>
+    <select id="resultMap"  resultMap="rm1">
+        select * from major;
+    </select>
+
+<!--    association 1-->
+    <resultMap id="as1" type="Major">
+        <id column="majorId" property="majorId"></id>
+        <result column="majorName" property="majorName"></result>
+        <result column="accademy" property="accademy"></result>
+        <association property="ady" javaType="Accademy">
+            <result property="accademyId" column="accademy"></result>
+            <result property="location" column="location"></result>
+            <result property="accademyName" column="accademyName"></result>
+        </association>
+    </resultMap>
+    <select id="association" resultType="com.company.entity.Major">
+        SELECT * FROM major WHERE accademy IN( SELECT accademyId FROM accademy WHERE accademy =#{accademyId})
+    </select>
+<!--    association2-->
+    <resultMap id="as2" type="com.company.entity.Major">
+        <id property="majorId" column="majorId"></id>
+        <result property="majorName" column="majorName"></result>
+        <result property="accademy" column="accademy"></result>
+
+        <association property="ady" javaType="Accademy" >
+            <result property="accademyId" column="accademy"></result>
+            <result property="location" column="location"></result>
+            <result property="accademyName" column="accademyName"></result>
+        </association>
+    </resultMap>
+    <select id="selectMajorWithAccademy" resultMap="as2">
+        select m.majorName,m.majorId,m.accademy,a.location,a.accademyName,a.accademyId from major m,accademy a where m.accademy=a.accademyId and a.accademyId=#{accademyId}
+    </select>
+<!--    association3-->
+    <resultMap id="as3" type="com.company.entity.Major">
+        <id column="majorId" property="majorId"></id>
+        <result column="majorName" property="majorName"></result>
+        <result column="accademy" property="accademy"></result>
+        <association property="ady" select="com.company.mapper.AccademyMapper.getAccademyById"  javaType="Accademy" column="accademy">
+            <result property="accademyId" column="accademy"></result>
+            <result property="location" column="location"></result>
+            <result property="accademyName" column="accademyName"></result>
+        </association>
+    </resultMap>
+    <select id="selectMajorStep" resultMap="as3">
+        select * from major where majorId=#{majorId}
+    </select>
+
+<!--    Batch 拼接1-->
+    <insert id="batchAddcc1" parameterType="list" useGeneratedKeys="true" keyProperty="majorId">
+        <foreach collection="majors" item="major" >
+            insert into major (majorName,accademy) values (#{major.majorName},#{major.accademy});
+        </foreach>
+    </insert>
+    <!--    Batch 拼接2-->
+    <select id="getMajorListByIds" resultType="com.company.entity.Major">
+        select * from major where majorId in
+        <foreach collection="majorIds" item="major_id" open="(" close=")" separator=",">
+            #{major_id}
+        </foreach>
+    </select>
+<!--collection-->
+    <resultMap id="getAccademyAndMajors" type="Accademy">
+        <id column="accademyId" property="accademyId"></id>
+        <result column="location" property="location"></result>
+        <collection property="majors" select="com.company.mapper.MajorMapper.getMajorById" column="accademyId">
+        </collection>
+    </resultMap>
+    <select id="getAccademyAndMajors" resultMap="getAccademyAndMajors" useCache="true">
+        select * from accademy where accademyId=#{academyId}
+    </select>
+
+
+
+
+
+    <select id="getMajor" resultType="com.company.entity.Major">
+        select * from major;
+    </select>
+    <insert id="insertMajor">
+        insert into major (majorName,accademy) values (#{majorName},#{accademy})
+    </insert>
+    <update id="updateMajor">
+        update major set majorId=#{majorId},majorName=#{majorName},accademy=#{accademy} where majorId=#{majorId};
+    </update>
+    <delete id="deleteMajorByid">
+        delete from major where majorId=#{majorId}
+    </delete>
+    <insert id="insertMajorWithPrimaryKey" useGeneratedKeys="true" keyProperty="majorId">
+        insert into major (majorName,accademy) values (#{majorName},#{accademy})
+    </insert>
+    <insert id="insertSelectKey" >
+        <selectKey keyProperty="majorName" resultType="string" order="BEFORE">
+            select majorName from major where majorId=3
+        </selectKey>
+         insert into major (majorName,accademy) values (#{majorName},#{accademy})
+    </insert>
+
+
+
+    <select id="getMajorById" resultType="com.company.entity.Major">
+        select * from major where majorId=#{majorId}
+    </select>
+    <select id="getClasses" resultType="com.company.entity.Class_1">
+        select classNumber from class where majorId=#{majorId};
+    </select>
+    <select id="getMajorByAccademyId" resultType="com.company.entity.Major">
+        select * from major where accademy=${accademyId};
+    </select>
+
+
+</mapper>
+
