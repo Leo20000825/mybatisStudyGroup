@@ -7,8 +7,8 @@
     namespace:名称空间, 对应接口的全类名
  -->
 <mapper namespace="com.company.mapper.AccademyMapper">
-<!--    type="org.mybatis.caches.ehcache.EhcacheCache"-->
-<!--    <cache type="org.mybatis.caches.ehcache.EhcacheCache"> </cache>-->
+<!--    enumTest="org.mybatis.caches.ehcache.EhcacheCache"-->
+<!--    <cache enumTest="org.mybatis.caches.ehcache.EhcacheCache"> </cache>-->
 
 
 <!--collection-->
@@ -20,6 +20,19 @@
     </resultMap>
     <select id="getAccademyAndMajors" resultMap="getAccademyAndMajors" useCache="true">
         select * from accademy where accademyId=#{academyId}
+    </select>
+
+<!--    dynamicSql-->
+    <select id="getAccademyBycriteria" resultType="com.company.entity.Accademy">
+        select * from accademy
+        <trim prefix="where" suffixOverrides="and" >
+            <if test="id!=null">
+                accademyId=#{id} and
+            </if>
+            <if test="name!=null">
+                accademyName=#{name} and
+            </if>
+        </trim>
     </select>
 
 
@@ -40,16 +53,6 @@
             #{major_id}
         </foreach>
     </select>
-    <select id="getAccademyBycriteria" resultType="com.company.entity.Accademy">
-        select * from accademy
-        <trim prefix="where" suffixOverrides="and" >
-            <if test="id!=null">
-                accademyId=#{id} and
-            </if>
-            <if test="name!=null">
-                accademyName=#{name} and
-            </if>
-        </trim>
-    </select>
+
 
 </mapper>

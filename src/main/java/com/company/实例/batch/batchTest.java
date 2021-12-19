@@ -3,6 +3,7 @@ package com.company.实例.batch;
 import com.company.entity.Major;
 import com.company.mapper.MajorMapper;
 import com.company.实例.ssf;
+import com.company.实例.typeHandler.enums.major;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -70,7 +71,7 @@ public class batchTest {
 //        批量操作--------通过修改ExcutorType 为BATCH变为批量操作
         try{
             for (int i=0;i<90;i++) {
-                mapper.simpleInsert(new Major(0, "batch", 2, null));
+                mapper.simpleInsert(new Major(0, "batch", 2,null));
             }
 
 

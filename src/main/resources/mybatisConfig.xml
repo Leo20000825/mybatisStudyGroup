@@ -8,15 +8,20 @@
     <!-- 设置日志输出, 方便观察sql语句和参数 -->
     <!--    约定驼峰映射-->
     <!--    别名处理器-->
+
     <settings>
         <setting name="logImpl" value="LOG4J"/>
         <setting name="lazyLoadingEnabled" value="true"/>
         <setting name="aggressiveLazyLoading" value="false"/>
     </settings>
+
     <typeAliases>
         <package name="com.company.entity"/>
     </typeAliases>
-
+    <typeHandlers>
+        <!--        配置自定义枚举的typeHandler-->
+        <typeHandler handler="com.company.实例.typeHandler.handler.majorTyperHandler" javaType="com.company.实例.typeHandler.enums.major"></typeHandler>
+    </typeHandlers>
     <environments default="development">
         <environment id="development">
             <transactionManager type="JDBC"/>

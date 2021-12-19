@@ -11,7 +11,7 @@
 
 <!--   simpleInsert -->
     <insert id="simpleInsert" useGeneratedKeys="true" keyProperty="majorId">
-         insert into major (majorName,accademy) values (#{majorName},#{accademy});
+         insert into major (majorName,accademy,enumTest) values (#{majorName},#{accademy},#{enumTest});
     </insert>
 <!--   simpleDeleteById -->
     <delete id="simpleDeleteById" >

@@ -1,9 +1,9 @@
-package com.company.实例.dynamicSQL;
+package com.company.实例.pageHelper;
 
 import com.company.entity.Accademy;
 import com.company.mapper.AccademyMapper;
-import com.company.mapper.MajorMapper;
 import com.company.实例.ssf;
+import com.github.pagehelper.PageHelper;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.List;
 
-public class dynamiclSql {
+public class page {
     @Test
     public void collection() throws IOException {
         //--------------------
@@ -21,19 +21,10 @@ public class dynamiclSql {
         //--------------------
 //        动态拼接sql
         try{
-            //select * from accademy where accademyId=?
-            List<Accademy> accademyBycriteria = mapper.getAccademyBycriteria(1,null);
-            for (Accademy accademy:accademyBycriteria){
-                System.out.println(accademy);
-            }
             //select * from accademy
+            PageHelper.startPage(1,5);
             List<Accademy> accademyBycriteria1 = mapper.getAccademyBycriteria(null,null);
             for (Accademy accademy:accademyBycriteria1){
-                System.out.println(accademy);
-            }
-            //select * from accademy where accademyName=?
-            List<Accademy> accademyBycriteria2 = mapper.getAccademyBycriteria(null,"计算机学院");
-            for (Accademy accademy:accademyBycriteria2){
                 System.out.println(accademy);
             }
         }finally {
